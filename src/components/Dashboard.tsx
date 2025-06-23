@@ -1,14 +1,17 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PerformanceMetrics } from './PerformanceMetrics';
 import { SofiaAvatar } from './SofiaAvatar';
 import { DailyFeedback } from './DailyFeedback';
 import { MetricsChart } from './MetricsChart';
 import { QuickActions } from './QuickActions';
 import { StatsSummary } from './StatsSummary';
-import { Clock, Users, Phone, TrendingUp, Award, Target, Bell, Settings, Sun, Moon } from 'lucide-react';
+import { DetailedReports } from './DetailedReports';
+import { Clock, Users, Phone, TrendingUp, Award, Target, Bell, Settings, Sun, Moon, BarChart3, FileText, Activity } from 'lucide-react';
 
 interface DashboardData {
   agent: string;
@@ -144,142 +147,182 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="p-6 space-y-6">
-        {/* Stats Summary Row */}
-        <StatsSummary metrics={currentData.metrics} />
+      {/* Main Content with Tabs */}
+      <div className="p-6">
+        <Tabs defaultValue="overview" className="w-full">
+          <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 mb-6 glass-card">
+            <TabsTrigger value="overview" className="flex items-center space-x-2">
+              <Activity className="h-4 w-4" />
+              <span>Visão Geral</span>
+            </TabsTrigger>
+            <TabsTrigger value="metrics" className="flex items-center space-x-2">
+              <BarChart3 className="h-4 w-4" />
+              <span>Indicadores</span>
+            </TabsTrigger>
+            <TabsTrigger value="reports" className="flex items-center space-x-2">
+              <FileText className="h-4 w-4" />
+              <span>Relatórios</span>
+            </TabsTrigger>
+          </TabsList>
 
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-          {/* Main Metrics Area */}
-          <div className="xl:col-span-3 space-y-6">
-            <PerformanceMetrics metrics={currentData.metrics} />
+          {/* Aba 1: Visão Geral */}
+          <TabsContent value="overview" className="space-y-6">
+            <StatsSummary metrics={currentData.metrics} />
             
-            {/* Enhanced Key Indicators Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card className="glass-card interactive-card scale-in">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center justify-between">
-                    <div className="flex items-center">
-                      <Clock className="mr-2 h-4 w-4 text-blue-500" />
-                      Tempo Médio
-                    </div>
-                    <Badge variant="outline" className="text-xs">
-                      Meta: 5min
-                    </Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold text-gradient mb-2">
-                    {currentData.metrics.avgCallTime}min
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Badge 
-                      variant={getBadgeVariant(getPerformanceLevel(currentData.metrics.avgCallTime, 'time'))}
-                      className="text-xs"
-                    >
-                      {getPerformanceLevel(currentData.metrics.avgCallTime, 'time')}
-                    </Badge>
-                    <TrendingUp className="h-3 w-3 text-green-500" />
-                  </div>
-                </CardContent>
-              </Card>
+            <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
+              <div className="xl:col-span-3 space-y-6">
+                {/* Enhanced Key Indicators Grid */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                  <Card className="glass-card interactive-card scale-in">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-sm flex items-center justify-between">
+                        <div className="flex items-center">
+                          <Clock className="mr-2 h-4 w-4 text-blue-500" />
+                          Tempo Médio
+                        </div>
+                        <Badge variant="outline" className="text-xs">
+                          Meta: 5min
+                        </Badge>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-3xl font-bold text-gradient mb-2">
+                        {currentData.metrics.avgCallTime}min
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Badge 
+                          variant={getBadgeVariant(getPerformanceLevel(currentData.metrics.avgCallTime, 'time'))}
+                          className="text-xs"
+                        >
+                          {getPerformanceLevel(currentData.metrics.avgCallTime, 'time')}
+                        </Badge>
+                        <TrendingUp className="h-3 w-3 text-green-500" />
+                      </div>
+                    </CardContent>
+                  </Card>
 
-              <Card className="glass-card interactive-card scale-in">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center justify-between">
-                    <div className="flex items-center">
-                      <Award className="mr-2 h-4 w-4 text-yellow-500" />
-                      Satisfação
-                    </div>
-                    <Badge variant="outline" className="text-xs">
-                      Meta: 8.0
-                    </Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold text-gradient mb-2">
-                    {currentData.metrics.satisfaction}/10
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Badge 
-                      variant={getBadgeVariant(getPerformanceLevel(currentData.metrics.satisfaction, 'rating'))}
-                      className="text-xs"
-                    >
-                      {getPerformanceLevel(currentData.metrics.satisfaction, 'rating')}
-                    </Badge>
-                    <TrendingUp className="h-3 w-3 text-green-500" />
-                  </div>
-                </CardContent>
-              </Card>
+                  <Card className="glass-card interactive-card scale-in">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-sm flex items-center justify-between">
+                        <div className="flex items-center">
+                          <Award className="mr-2 h-4 w-4 text-yellow-500" />
+                          Satisfação
+                        </div>
+                        <Badge variant="outline" className="text-xs">
+                          Meta: 8.0
+                        </Badge>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-3xl font-bold text-gradient mb-2">
+                        {currentData.metrics.satisfaction}/10
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Badge 
+                          variant={getBadgeVariant(getPerformanceLevel(currentData.metrics.satisfaction, 'rating'))}
+                          className="text-xs"
+                        >
+                          {getPerformanceLevel(currentData.metrics.satisfaction, 'rating')}
+                        </Badge>
+                        <TrendingUp className="h-3 w-3 text-green-500" />
+                      </div>
+                    </CardContent>
+                  </Card>
 
-              <Card className="glass-card interactive-card scale-in">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center justify-between">
-                    <div className="flex items-center">
-                      <Target className="mr-2 h-4 w-4 text-green-500" />
-                      Resolução
-                    </div>
-                    <Badge variant="outline" className="text-xs">
-                      Meta: 85%
-                    </Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold text-gradient mb-2">
-                    {currentData.metrics.resolutionRate}%
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Badge 
-                      variant={getBadgeVariant(getPerformanceLevel(currentData.metrics.resolutionRate))}
-                      className="text-xs"
-                    >
-                      {getPerformanceLevel(currentData.metrics.resolutionRate)}
-                    </Badge>
-                    <TrendingUp className="h-3 w-3 text-green-500" />
-                  </div>
-                </CardContent>
-              </Card>
+                  <Card className="glass-card interactive-card scale-in">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-sm flex items-center justify-between">
+                        <div className="flex items-center">
+                          <Target className="mr-2 h-4 w-4 text-green-500" />
+                          Resolução
+                        </div>
+                        <Badge variant="outline" className="text-xs">
+                          Meta: 85%
+                        </Badge>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-3xl font-bold text-gradient mb-2">
+                        {currentData.metrics.resolutionRate}%
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Badge 
+                          variant={getBadgeVariant(getPerformanceLevel(currentData.metrics.resolutionRate))}
+                          className="text-xs"
+                        >
+                          {getPerformanceLevel(currentData.metrics.resolutionRate)}
+                        </Badge>
+                        <TrendingUp className="h-3 w-3 text-green-500" />
+                      </div>
+                    </CardContent>
+                  </Card>
 
-              <Card className="glass-card interactive-card scale-in">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center justify-between">
-                    <div className="flex items-center">
-                      <Phone className="mr-2 h-4 w-4 text-purple-500" />
-                      Chamadas
-                    </div>
-                    <Badge variant="outline" className="text-xs">
-                      Hoje
-                    </Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold text-gradient mb-2">
-                    {currentData.metrics.callsHandled}
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Badge variant="outline" className="text-xs text-primary border-primary bg-primary/5">
-                      Meta: 40-50
-                    </Badge>
-                  </div>
-                </CardContent>
-              </Card>
+                  <Card className="glass-card interactive-card scale-in">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-sm flex items-center justify-between">
+                        <div className="flex items-center">
+                          <Phone className="mr-2 h-4 w-4 text-purple-500" />
+                          Chamadas
+                        </div>
+                        <Badge variant="outline" className="text-xs">
+                          Hoje
+                        </Badge>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-3xl font-bold text-gradient mb-2">
+                        {currentData.metrics.callsHandled}
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Badge variant="outline" className="text-xs text-primary border-primary bg-primary/5">
+                          Meta: 40-50
+                        </Badge>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <MetricsChart />
+              </div>
+
+              {/* Sofia and Actions Sidebar */}
+              <div className="space-y-6">
+                <QuickActions />
+                <SofiaAvatar />
+                {showFeedback && (
+                  <DailyFeedback 
+                    metrics={currentData.metrics} 
+                    agentName={currentData.agent}
+                  />
+                )}
+              </div>
             </div>
+          </TabsContent>
 
-            <MetricsChart />
-          </div>
+          {/* Aba 2: Indicadores Detalhados */}
+          <TabsContent value="metrics" className="space-y-6">
+            <PerformanceMetrics metrics={currentData.metrics} />
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+              <div className="xl:col-span-2">
+                <MetricsChart />
+              </div>
+              <div className="space-y-6">
+                <SofiaAvatar />
+                {showFeedback && (
+                  <DailyFeedback 
+                    metrics={currentData.metrics} 
+                    agentName={currentData.agent}
+                  />
+                )}
+              </div>
+            </div>
+          </TabsContent>
 
-          {/* Sofia and Actions Sidebar */}
-          <div className="space-y-6">
-            <QuickActions />
-            <SofiaAvatar />
-            {showFeedback && (
-              <DailyFeedback 
-                metrics={currentData.metrics} 
-                agentName={currentData.agent}
-              />
-            )}
-          </div>
-        </div>
+          {/* Aba 3: Relatórios */}
+          <TabsContent value="reports" className="space-y-6">
+            <DetailedReports metrics={currentData.metrics} agentName={currentData.agent} />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
