@@ -179,6 +179,28 @@
   }
 }
 
+@keyframes fade-in-50 {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-from-bottom-4 {
+  0% {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .pulse-glow {
   animation: pulse-glow 2s ease-in-out infinite;
 }
@@ -204,6 +226,19 @@
 
 .slide-up {
   animation: slide-up 0.5s ease-out;
+}
+
+.animate-in {
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+}
+
+.fade-in-50 {
+  animation: fade-in-50 var(--animation-duration, 0.5s) ease-out;
+}
+
+.slide-in-from-bottom-4 {
+  animation: slide-in-from-bottom-4 var(--animation-duration, 0.5s) ease-out;
 }
 
 /* Glass morphism effects */
@@ -266,6 +301,25 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Enhanced hover effects */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px hsl(var(--foreground) / 0.1);
+}
+
+/* Professional spacing utilities */
+.section-spacing {
+  @apply py-12 md:py-16 lg:py-20;
+}
+
+.content-spacing {
+  @apply space-y-8 md:space-y-12;
 }
 
 /* Responsive improvements */
