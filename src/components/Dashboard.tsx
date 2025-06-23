@@ -11,7 +11,8 @@ import { MetricsChart } from './MetricsChart';
 import { QuickActions } from './QuickActions';
 import { StatsSummary } from './StatsSummary';
 import { DetailedReports } from './DetailedReports';
-import { Clock, Users, Phone, TrendingUp, Award, Target, Bell, Settings, Sun, Moon, BarChart3, FileText, Activity } from 'lucide-react';
+import { SofiaFeedbackTab } from './SofiaFeedbackTab';
+import { Clock, Users, Phone, TrendingUp, Award, Target, Bell, Settings, Sun, Moon, BarChart3, FileText, Activity, Brain } from 'lucide-react';
 
 interface DashboardData {
   agent: string;
@@ -48,16 +49,8 @@ const Dashboard = () => {
     }
   });
 
-  const [showFeedback, setShowFeedback] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [notifications, setNotifications] = useState(3);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowFeedback(true);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
 
   const getPerformanceLevel = (score: number, type: 'percentage' | 'rating' | 'time' = 'percentage') => {
     if (type === 'rating') {
@@ -95,31 +88,33 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen pulse-gradient">
-      {/* Enhanced Header */}
-      <div className="sticky top-0 z-50 glass-strong border-b border-border/50 px-6 py-4">
-        <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+      {/* Professional Header */}
+      <div className="sticky top-0 z-50 backdrop-blur-xl bg-white/90 dark:bg-slate-900/90 border-b border-slate-200/50 dark:border-slate-700/50 px-6 py-4 shadow-sm">
+        <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div className="flex items-center space-x-6">
-            <div className="flex items-center space-x-3">
-              <img 
-                src="/lovable-uploads/3e9a62ac-b44a-4fb5-b48c-edfb073bbdfe.png" 
-                alt="Pulse Logo" 
-                className="h-10 w-auto"
-              />
+            <div className="flex items-center space-x-4">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
+                <img 
+                  src="/lovable-uploads/3e9a62ac-b44a-4fb5-b48c-edfb073bbdfe.png" 
+                  alt="Pulse Logo" 
+                  className="h-6 w-6 object-contain"
+                />
+              </div>
               <div>
-                <h1 className="text-2xl font-bold text-gradient">Painel do Atendente</h1>
-                <p className="text-sm text-muted-foreground">Bem-vinda, {currentData.agent}</p>
+                <h1 className="text-xl font-bold text-slate-900 dark:text-white">Dashboard Pulse</h1>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Bem-vinda, {currentData.agent}</p>
               </div>
             </div>
           </div>
           
-          <div className="flex items-center space-x-4">
-            <Badge variant="outline" className="text-primary border-primary bg-primary/5">
+          <div className="flex items-center space-x-3">
+            <Badge variant="outline" className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700">
               <Clock className="mr-1 h-3 w-3" />
               {currentData.date}
             </Badge>
             
-            <Button variant="outline" size="sm" className="relative">
+            <Button variant="ghost" size="sm" className="relative">
               <Bell className="h-4 w-4" />
               {notifications > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
@@ -128,65 +123,61 @@ const Dashboard = () => {
               )}
             </Button>
             
-            <Button variant="outline" size="sm" onClick={toggleTheme}>
+            <Button variant="ghost" size="sm" onClick={toggleTheme}>
               {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
             
-            <Button variant="outline" size="sm">
+            <Button variant="ghost" size="sm">
               <Settings className="h-4 w-4" />
-            </Button>
-            
-            <Button 
-              onClick={() => setShowFeedback(!showFeedback)}
-              className="pulse-accent-gradient hover:scale-105 transition-transform shadow-medium"
-            >
-              <Users className="mr-2 h-4 w-4" />
-              Sofia Feedback
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Main Content with Tabs */}
-      <div className="p-6">
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto p-6">
         <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 mb-6 glass-card">
-            <TabsTrigger value="overview" className="flex items-center space-x-2">
+          <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-4 mb-8 bg-white dark:bg-slate-800 shadow-lg border border-slate-200 dark:border-slate-700">
+            <TabsTrigger value="overview" className="flex items-center space-x-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 dark:data-[state=active]:bg-blue-900/50">
               <Activity className="h-4 w-4" />
-              <span>Visão Geral</span>
+              <span className="font-medium">Visão Geral</span>
             </TabsTrigger>
-            <TabsTrigger value="metrics" className="flex items-center space-x-2">
+            <TabsTrigger value="metrics" className="flex items-center space-x-2 data-[state=active]:bg-green-50 data-[state=active]:text-green-700 dark:data-[state=active]:bg-green-900/50">
               <BarChart3 className="h-4 w-4" />
-              <span>Indicadores</span>
+              <span className="font-medium">Indicadores</span>
             </TabsTrigger>
-            <TabsTrigger value="reports" className="flex items-center space-x-2">
+            <TabsTrigger value="sofia" className="flex items-center space-x-2 data-[state=active]:bg-purple-50 data-[state=active]:text-purple-700 dark:data-[state=active]:bg-purple-900/50">
+              <Brain className="h-4 w-4" />
+              <span className="font-medium">Sofia IA</span>
+            </TabsTrigger>
+            <TabsTrigger value="reports" className="flex items-center space-x-2 data-[state=active]:bg-orange-50 data-[state=active]:text-orange-700 dark:data-[state=active]:bg-orange-900/50">
               <FileText className="h-4 w-4" />
-              <span>Relatórios</span>
+              <span className="font-medium">Relatórios</span>
             </TabsTrigger>
           </TabsList>
 
-          {/* Aba 1: Visão Geral */}
+          {/* Tab 1: Visão Geral */}
           <TabsContent value="overview" className="space-y-6">
-            <StatsSummary metrics={currentData.metrics} />
-            
-            <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-              <div className="xl:col-span-3 space-y-6">
-                {/* Enhanced Key Indicators Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2 space-y-6">
+                <StatsSummary metrics={currentData.metrics} />
+                
+                {/* Key Performance Cards */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                  <Card className="glass-card interactive-card scale-in">
+                  <Card className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-sm flex items-center justify-between">
                         <div className="flex items-center">
                           <Clock className="mr-2 h-4 w-4 text-blue-500" />
-                          Tempo Médio
+                          <span className="text-slate-700 dark:text-slate-300">Tempo Médio</span>
                         </div>
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className="text-xs bg-slate-50 dark:bg-slate-700">
                           Meta: 5min
                         </Badge>
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-3xl font-bold text-gradient mb-2">
+                      <div className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
                         {currentData.metrics.avgCallTime}min
                       </div>
                       <div className="flex items-center space-x-2">
@@ -201,20 +192,20 @@ const Dashboard = () => {
                     </CardContent>
                   </Card>
 
-                  <Card className="glass-card interactive-card scale-in">
+                  <Card className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-sm flex items-center justify-between">
                         <div className="flex items-center">
                           <Award className="mr-2 h-4 w-4 text-yellow-500" />
-                          Satisfação
+                          <span className="text-slate-700 dark:text-slate-300">Satisfação</span>
                         </div>
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className="text-xs bg-slate-50 dark:bg-slate-700">
                           Meta: 8.0
                         </Badge>
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-3xl font-bold text-gradient mb-2">
+                      <div className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
                         {currentData.metrics.satisfaction}/10
                       </div>
                       <div className="flex items-center space-x-2">
@@ -229,20 +220,20 @@ const Dashboard = () => {
                     </CardContent>
                   </Card>
 
-                  <Card className="glass-card interactive-card scale-in">
+                  <Card className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-sm flex items-center justify-between">
                         <div className="flex items-center">
                           <Target className="mr-2 h-4 w-4 text-green-500" />
-                          Resolução
+                          <span className="text-slate-700 dark:text-slate-300">Resolução</span>
                         </div>
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className="text-xs bg-slate-50 dark:bg-slate-700">
                           Meta: 85%
                         </Badge>
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-3xl font-bold text-gradient mb-2">
+                      <div className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
                         {currentData.metrics.resolutionRate}%
                       </div>
                       <div className="flex items-center space-x-2">
@@ -257,24 +248,24 @@ const Dashboard = () => {
                     </CardContent>
                   </Card>
 
-                  <Card className="glass-card interactive-card scale-in">
+                  <Card className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-sm flex items-center justify-between">
                         <div className="flex items-center">
                           <Phone className="mr-2 h-4 w-4 text-purple-500" />
-                          Chamadas
+                          <span className="text-slate-700 dark:text-slate-300">Chamadas</span>
                         </div>
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className="text-xs bg-slate-50 dark:bg-slate-700">
                           Hoje
                         </Badge>
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-3xl font-bold text-gradient mb-2">
+                      <div className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
                         {currentData.metrics.callsHandled}
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Badge variant="outline" className="text-xs text-primary border-primary bg-primary/5">
+                        <Badge variant="outline" className="text-xs text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-600">
                           Meta: 40-50
                         </Badge>
                       </div>
@@ -285,21 +276,15 @@ const Dashboard = () => {
                 <MetricsChart />
               </div>
 
-              {/* Sofia and Actions Sidebar */}
+              {/* Sidebar */}
               <div className="space-y-6">
                 <QuickActions />
                 <SofiaAvatar />
-                {showFeedback && (
-                  <DailyFeedback 
-                    metrics={currentData.metrics} 
-                    agentName={currentData.agent}
-                  />
-                )}
               </div>
             </div>
           </TabsContent>
 
-          {/* Aba 2: Indicadores Detalhados */}
+          {/* Tab 2: Indicadores */}
           <TabsContent value="metrics" className="space-y-6">
             <PerformanceMetrics metrics={currentData.metrics} />
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
@@ -308,17 +293,16 @@ const Dashboard = () => {
               </div>
               <div className="space-y-6">
                 <SofiaAvatar />
-                {showFeedback && (
-                  <DailyFeedback 
-                    metrics={currentData.metrics} 
-                    agentName={currentData.agent}
-                  />
-                )}
               </div>
             </div>
           </TabsContent>
 
-          {/* Aba 3: Relatórios */}
+          {/* Tab 3: Sofia IA */}
+          <TabsContent value="sofia" className="space-y-6">
+            <SofiaFeedbackTab metrics={currentData.metrics} agentName={currentData.agent} />
+          </TabsContent>
+
+          {/* Tab 4: Relatórios */}
           <TabsContent value="reports" className="space-y-6">
             <DetailedReports metrics={currentData.metrics} agentName={currentData.agent} />
           </TabsContent>
